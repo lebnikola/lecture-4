@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    container_name: txdemo-db
+    environment:
+      POSTGRES_DB: txdemo
+      POSTGRES_USER: txdemo
+      POSTGRES_PASSWORD: txdemo
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U txdemo -d txdemo"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
